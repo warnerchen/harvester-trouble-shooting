@@ -1,4 +1,4 @@
-# Out Of Memory (OOM) Troubleshooting
+# VM Out Of Memory (OOM) Troubleshooting
 
 Manually trigger VM OOM using `memhold` and `memtest`.
 

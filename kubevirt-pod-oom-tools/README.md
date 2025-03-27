@@ -1,10 +1,30 @@
 # KubeVirt Pod Out Of Memory (OOM) Troubleshooting
 
-If a KubeVirt-related pod encounters an OOM event, we can use cluster-profiler to dump the pprof files.
+If a KubeVirt-related pod encounters an OOM event, we can use `cluster-profiler` to dump the pprof files.
 
 Reference: https://kubevirt.io/user-guide/debug_virt_stack/debug/#kubevirt-pprof-profiler
 
 ## Quick Start
+
+Requirements: KubeVirt requires the `ClusterProfiler` **featureGate** to be enabled. In **Harvester**, this can be configured by setting `.spec.values.kubevirt.spec.configuration.developerConfiguration.featureGates` in `managedcharts.management.cattle.io`.
+
+```yaml
+# kubectl -n fleet-local edit managedcharts.management.cattle.io harvester
+...
+spec:
+  values:
+    kubevirt:
+      spec:
+        configuration:
+          developerConfiguration:
+            featureGates:
+            - ClusterProfiler
+            - LiveMigration
+            - HotplugVolumes
+            - HostDevices
+            - GPU
+...
+```
 
 ### Harvester v1.3.2
 

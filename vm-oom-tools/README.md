@@ -8,17 +8,44 @@ Requirements:
 1. Guest OS: gcc installed
 2. virt-launcher Pod: gcc installed
 
-Guest OS:
+## Guest OS
 
-```bash
-gcc memtest.c -o memtest
-./memtest
-```
-
-virt-launcher Pod:
+It is recommended to use the same version of the image to build the debug tool, rather than building and installing it directly inside the Guest OS.
 
 ```Dockerfile
-FROM <virt-launcher image>
+FROM <Guest OS Image>
+
+COPY memtest.c /tmp
+
+# Adjust the command according to the Guest OS
+RUN apt -y install gcc \
+    && gcc /tmp/memtest.c -o /tmp/memtest
+```
+
+Get `memtest` from temporary container.
+
+```bash
+CID=$(docker create <Guest OS Debug Tool Installed Image>)
+
+docker cp "$CID":/tmp/memtest ./memtest
+
+docker rm $CID
+```
+
+Upload `memtest` to the Guest OS.
+
+```bash
+scp memtest root@xxx:/tmp
+
+ssh root@xxx
+
+./tmp/memtest
+```
+
+## virt-launcher Pod
+
+```Dockerfile
+FROM <Virt Launcher Image>
 
 COPY memhold.c /tmp
 
@@ -26,11 +53,17 @@ RUN zypper install -y gcc \
     && gcc /tmp/memhold.c -o /tmp/memhold
 ```
 
+When building a custom virt-launcher image, make sure the image name and tag are consistent with the original image. After building, you can overwrite the corresponding image in the HV cluster and apply the changes by restarting the VM. To avoid unexpected issues, it is recommended to back up the original virt-launcher image before overwriting it.
+
 ```bash
-kubectl exec -it <virt-launcher pod> -- /tmp/memhold 100
+ctr -n k8s.io image import <Virt Launcher Debug Tool Installed Image>
 ```
 
-First, run `memhold` in the virt-launcher pod, then execute `memtest` in the Guest OS. This will trigger an OOM event, and you can observe the corresponding kernel logs.
+```bash
+kubectl exec -it <virt-launcher Pod> -- /tmp/memhold 100
+```
+
+First, run `memhold` in the virt-launcher Pod, then execute `memtest` in the Guest OS. This will trigger an OOM event, and you can observe the corresponding kernel logs.
 
 ```log
 ...

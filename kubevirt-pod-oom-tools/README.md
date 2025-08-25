@@ -6,7 +6,9 @@ Reference: https://kubevirt.io/user-guide/debug_virt_stack/debug/#kubevirt-pprof
 
 ## Quick Start
 
-Requirements: KubeVirt requires the `ClusterProfiler` **featureGate** to be enabled. In **Harvester**, this can be configured by setting `.spec.values.kubevirt.spec.configuration.developerConfiguration.featureGates` in `managedcharts.management.cattle.io`.
+### Requirements
+
+KubeVirt requires the `ClusterProfiler` **featureGate** to be enabled. In **Harvester**, this can be configured by setting `.spec.values.kubevirt.spec.configuration.developerConfiguration.featureGates` in `managedcharts.management.cattle.io`.
 
 You can use this command to obtain the currently enabled featureGates for KubeVirt. The default configuration for HV is as follows:
 

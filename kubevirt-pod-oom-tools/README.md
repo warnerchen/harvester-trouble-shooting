@@ -76,12 +76,6 @@ go build
 
 ```bash
 # Prefer the Harvester kubeconfig file and store it together with the cluster-profiler.
-# Start a temporary container. The Go version needs to correspond to the Go version used by KubeVirt. You can confirm KubeVirt version on the Harvester release page.
-# By default, HV nodes do not have nerdctl tools installed, and you need to install them manually.
-nerdctl run --rm -it -v /<path-to-your-folder>:/go/debug --net host golang:1.22-alpine sh
-
-cd /go/debug
-
 # Dump the pprof files.
 ./cluster-profiler --kubeconfig rke2.yaml --namespace harvester-system --cmd start
 2025/03/27 02:15:23 SUCCESS: started cpu profiling KubeVirt control plane

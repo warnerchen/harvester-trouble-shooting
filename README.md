@@ -1,3 +1,3 @@
 # Harvester Trouble Shooting
 
-Some tools for Harvester troubleshooting
+Some tools for Harvester troubleshooting.
